@@ -1,3 +1,4 @@
+include 
 ;##################################################################################################
 ;# Customization
 
@@ -155,13 +156,65 @@ endif
 macro setup_general_gfx_defines(num)
     !_name := !gfx_<num>_internal_name
 
-    !gfx_<num>_walk_frames := !{!{_name}_walk_frames}
+    if defined("!{_name}_data_loc")
+        !gfx_<num>_data_loc := !{!{_name}_data_loc}
+    endif
 
-    !gfx_<num>_idle_pose := !{!{_name}_idle_pose}
-    !gfx_<num>_idle_carry_pose := !{!{_name}_idle_carry_pose}
-    !gfx_<num>_angled_pose := !{!{_name}_angled_pose}
-    !gfx_<num>_looking_up_pose := !{!{_name}_looking_up_pose}
-    !gfx_<num>_looking_up_carry_pose := !{!{_name}_looking_up_carry_pose}
+    %define_individual_define("walk_frames", <num>)
+
+    %define_individual_define("idle_pose", <num>)
+    %define_individual_define("idle_carry_pose", <num>)
+    %define_individual_define("angled_pose", <num>)
+    %define_individual_define("looking_up_pose", <num>)
+    %define_individual_define("looking_up_carry_pose", <num>)
+    %define_individual_define("crouching_pose", <num>)
+    %define_individual_define("crouching_with_item_pose", <num>)
+    %define_individual_define("shooting_fireball_pose", <num>)
+    %define_individual_define("shooting_fireball_in_air_pose", <num>)
+    %define_individual_define("kicking_pose", <num>)
+    %define_individual_define("pick_up_pose", <num>)
+    %define_individual_define("facing_screen_pose", <num>)
+    %define_individual_define("jump_carry_pose", <num>)
+    %define_individual_define("jump_pose", <num>)
+    %define_individual_define("jump_max_speed_pose", <num>)
+    %define_individual_define("falling_pose", <num>)
+    %define_individual_define("braking_pose", <num>)
+    %define_individual_define("sliding_pose", <num>)
+    %define_individual_define("peace_pose", <num>)
+    %define_individual_define("peace_on_yoshi_pose", <num>)
+    %define_individual_define("on_yoshi_idle_pose", <num>)
+    %define_individual_define("on_yoshi_turning_pose", <num>)
+    %define_individual_define("on_yoshi_crouching_pose", <num>)
+    %define_individual_define("on_yoshi_spitting_tongue_1_pose", <num>)
+    %define_individual_define("on_yoshi_spitting_tongue_2_pose", <num>)
+    %define_individual_define("death_pose", <num>)
+    %define_individual_define("grab_flower_pose", <num>)
+    %define_individual_define("enter_door_pipe_pose", <num>)
+    %define_individual_define("enter_door_pipe_on_yoshi_pose", <num>)
+    %define_individual_define("enter_vertical_pipe_up_pose", <num>)
+    %define_individual_define("enter_vertical_pipe_up_on_yoshi_pose", <num>)
+    %define_individual_define("enter_vertical_pipe_down_pose", <num>)
+    %define_individual_define("enter_vertical_pipe_down_on_yoshi_pose", <num>)
+    %define_individual_define("exit_vertical_pipe_up_pose", <num>)
+    %define_individual_define("exit_vertical_pipe_up_on_yoshi_pose", <num>)
+    %define_individual_define("exit_vertical_pipe_down_pose", <num>)
+    %define_individual_define("exit_vertical_pipe_down_on_yoshi_pose", <num>)
+    %define_individual_define("swimming_shooting_fireball_pose", <num>)
+    %define_individual_define("swimming_shooting_fireball_carry_pose", <num>)
+    %define_individual_define("climbing_back_pose", <num>)
+    %define_individual_define("climbing_front_pose", <num>)
+    %define_individual_define("stunned_pose", <num>)
+    %define_individual_define("pballoon_pose", <num>)
+    %define_individual_define("pballoon_transition_pose", <num>)
+
+endmacro
+
+macro define_individual_define(name, num)
+    if defined("!{_name}_<name>")
+        !gfx_<num>_<name> := !{!{_name}_<name>}
+    else 
+        print "WARNING: \!!{_name}_<name> does not exist. Using default values..."
+    endif
 endmacro
 
 
@@ -231,6 +284,13 @@ endmacro
 !player_disable_collision       = $185C|!addr
 !player_stomp_count             = $18D2|!addr
 !player_frozen                  = $13FB|!addr
+!player_punching                = $149E|!addr
+!player_kicking                 = $149A|!addr
+!player_picking_up              = $1498|!addr
+!player_facing_screen           = $1499|!addr
+!player_in_cloud                = $18C2|!addr
+!player_looking_up              = $13DE|!addr
+!player_turning_around          = $13DD|!addr
 
 !player_item_box_2              = $0DBC|!addr
 !player_item_box                = $0DC2|!addr
@@ -290,12 +350,30 @@ endif
 !player_extra_tile_frame        = !player_extra_tile_offset_y+2
 !player_extra_tile_oam          = !player_extra_tile_frame+1
 
-!player_walking_frames          = !player_extra_tile_oam+1
-!player_idle_pose               = !player_walking_frames+1
-!player_idle_carry_pose         = !player_idle_pose+1
-!player_angled_pose             = !player_idle_carry_pose+1
-!player_looking_up_pose         = !player_idle_carry_pose+1
-!player_looking_up_carry_pose   = !player_idle_carry_pose+1
-!player_animation_ram           = !player_angled_pose+1
+!player_walking_frames                  = !player_extra_tile_oam+1
+!player_idle_pose                       = !player_walking_frames+1
+!player_idle_carry_pose                 = !player_idle_pose+1
+!player_angled_pose                     = !player_idle_carry_pose+1
+!player_looking_up_pose                 = !player_angled_pose+1
+!player_looking_up_carry_pose           = !player_looking_up_pose+1
+!player_crouching_pose                  = !player_looking_up_carry_pose+1
+!player_crouching_with_item_pose        = !player_crouching_pose+1
+!player_shooting_fireball_pose          = !player_crouching_with_item_pose+1
+!player_shooting_fireball_in_air_pose   = !player_shooting_fireball_pose+1
+!player_kicking_pose                    = !player_shooting_fireball_in_air_pose+1
+!player_pick_up_pose                    = !player_kicking_pose+1
+!player_facing_screen_pose              = !player_pick_up_pose+1
+!player_jump_carry_pose                 = !player_facing_screen_pose+1
+!player_jump_pose                       = !player_jump_carry_pose+1
+!player_jump_max_speed_pose             = !player_jump_pose+1
+!player_falling_pose                    = !player_jump_max_speed_pose+1
+!player_braking_pose                    = !player_falling_pose+1
+!player_sliding_pose                    = !player_braking_pose+1
+
+;cutscene           : not supported
+;flying             : not supported ; 00CE79
+;flying, sliding    : not supported ; 00CE7F
+
+!player_animation_ram           = !player_sliding_pose+1
 
 !debug_ram                      = !player_animation_ram+$40
