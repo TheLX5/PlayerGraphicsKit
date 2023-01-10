@@ -2,7 +2,7 @@
 ;# Powerup expansion kit - Made by lx5
 
     print ""
-    print "Player GFX Kit v1.0 - Made by lx5"
+    print "Player GFX Kit v1.1 - Made by lx5"
     print "Readme & documentation: https://github.com/TheLX5/PlayerGraphicsKit/wiki"
     print ""
 
@@ -42,7 +42,11 @@ if !_error_detected == 0
                     !protected_data := "gfx_!{_num}_graphics"
                     !j #= 1
                 else
-                    !protected_data := "!protected_data, gfx_!{_num}_graphics"
+                    if filesize("internal_files/!{gfx_!{_num}_path}/!{gfx_!{_num}_internal_name}.bin") > $10000
+                        !protected_data := "!protected_data, gfx_!{_num}_graphics, gfx_!{_num}_graphics_part2"
+                    else
+                        !protected_data := "!protected_data, gfx_!{_num}_graphics"
+                    endif
                 endif
             endif
             if !{gfx_!{_num}_extra_gfx_exist} != 0
@@ -57,11 +61,14 @@ if !_error_detected == 0
 		!i #= !i+1
 	endif
 
+    print "PROT: !protected_data"
+
 	prot !protected_data
 
 ;################################################
 ;# Engines handler
 
+    %insert_patch_file("hex_edits.asm")
     %insert_patch_file("image_engine.asm")
     %insert_patch_file("initializer.asm")
     %insert_patch_file("palette_engine.asm")
