@@ -92,7 +92,7 @@
     db $3E                  ; [3E]      Dead
     db $3F                  ; [3F]      Shooting fireball
     db $7F,$7F              ; [40-41]   Unused
-    db $2A,$3B              ; [42-43]   Using P-Balloon 
+    db $3B,$3B              ; [42-43]   Using P-Balloon 
     db $25,$3A,$00          ; [44-46]   Copy of the spinjump poses
 
 
@@ -147,7 +147,7 @@
 ;# Must be 4 poses in total
 
 .spin_animation
-    db $00,$25,$00,$0F
+    db $00,$44,$00,$45
 
 ;################################################
 ;# Animation poses for swimming
@@ -448,9 +448,9 @@
     db $10                  ; [26]      Victory pose
     db $06,$04              ; [27-28]   Commanding Yoshi
     db $08                  ; [29]      Crouching on Yoshi; also used for going into a pipe
-    db $2B,$30              ; [2A-2B]   Flying with cape
-    db $35                  ; [2C]      Slide with cape while flying
-    db $3A,$3F,$43          ; [2D-2F]   Dive with cape
+    db $FF,$FF              ; [2A-2B]   Flying with cape
+    db $FF                  ; [2C]      Slide with cape while flying
+    db $FF,$FF,$43          ; [2D-2F]   Dive with cape
     db $00,$00              ; [30-31]   Burned, cutscene poses
     db $00                  ; [32]      Looking in front, cutscene pose
     db $00,$00              ; [33-34]   Looking at the distance, cutscene pose
@@ -462,5 +462,5 @@
     db $00                  ; [3E]      Dead
     db $00                  ; [3F]      Shooting fireball
     db $00,$00              ; [40-41]   Unused
-    db $00,$10              ; [42-43]   Using P-Balloon 
+    db $10,$10              ; [42-43]   Using P-Balloon 
     db $04,$00,$06          ; [44-46]   Copy of the spinjump poses

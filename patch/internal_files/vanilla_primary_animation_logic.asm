@@ -6,7 +6,7 @@ vanilla_primary_animation_logic:
     lda $14A2|!addr
     bne .player_is_cape_spinning
     ldx $13DF|!addr
-    ldy !player_in_air
+    lda !player_in_air
     beq .player_on_ground
     ldy #$04
     bit !player_y_speed
@@ -84,7 +84,7 @@ vanilla_primary_animation_logic:
     tay 
     lsr 
     tax 
-    ldy !player_in_air
+    lda !player_in_air
     beq +
     lda !player_y_speed
     bmi +
@@ -92,8 +92,8 @@ vanilla_primary_animation_logic:
 +   
     lda $CEA9,y
     sta $13DF|!addr 
-    ;lda $CEA1,x
-    ;sta !player_direction
+    lda $CEA1,x
+    sta !player_direction
     ldy !player_powerup
     cpy #$02
     bne .no_cape
