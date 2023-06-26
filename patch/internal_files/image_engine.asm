@@ -26,6 +26,7 @@ pushpc
 
     org $00CEB1|!bank
         autoclean jml player_primary_animation_logic
+        autoclean jml player_primary_animation_logic_horz_pipe
         cape_spin_interaction:
             phb
             phk 
@@ -48,6 +49,19 @@ pushpc
             plb 
             rtl 
 
+            
+    org $00D1A1         ; repoint primary animation logic hijack
+        jsl $00CEB5|!bank   
+
+
+
+    org $00D193                 ; Fix sprite masks during pipe animation
+        db $00,$6F,$1F,$00      ; not sure if it's going to mess anything...
+    org $00D1D1
+        eor #$10
+
+
+
     org $00CEA1|!bank
         db $00,$00,$01,$01
     org $00CA31|!bank
@@ -60,9 +74,11 @@ pushpc
     org $00D1B2|!bank
         player_entering_door_pose_handler_return:
     org $00D209|!bank
-        autoclean jml player_entering_vertical_pipe_pose_handler
+        autoclean jml player_vertical_pipe_pose_handler
     org $00D20E|!bank
-        player_entering_vertical_pipe_pose_handler_return:
+        player_vertical_pipe_pose_handler_return:
+    org $00D22A|!bank
+        player_vertical_pipe_pose_handler_carry_return:
     org $00D228|!bank
         lda $00
 

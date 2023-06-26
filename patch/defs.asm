@@ -97,7 +97,7 @@ endif
 !big_p2_pal_num = $04
 !small_p2_pal_num = $04
 !cape_p2_pal_num = $04
-!fire_p2_pal_num = $07
+!fire_p2_pal_num = $05
 
 !small_p2_extra_gfx_num = $00
 !big_p2_extra_gfx_num = $00

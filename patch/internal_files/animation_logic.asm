@@ -71,6 +71,34 @@ player_primary_animation_logic:
 .return 
     rtl 
 
+.horz_pipe
+    phb 
+    phk 
+    plb 
+    rep #$20
+    lda !player_graphics_index 
+    and #$00FF
+    asl 
+    tax 
+    lda.w .animation_logic_ptrs,x
+    clc 
+    adc #$0003
+    sta $0E
+    lda.w .walk_timer_ptrs,x
+    sta $00
+    lda.w .walk_anim_ptrs,x
+    sta $03
+    sep #$30
+    phk 
+    pla 
+    sta $02
+    sta $05
+    plb 
+    ldx #$00
+    jsr ($000E|!dp,x)
+    rtl 
+
+
 .animation_logic_ptrs
     !i #= 0
     while !i < !max_gfx_num
@@ -746,39 +774,16 @@ player_grab_flower_pose_handler:
 ;# Entering a door pose
 
 player_entering_door_pose_handler:
+    lda !player_in_yoshi
+    beq .ignore
     phx 
-    phy 
     lda !player_graphics_index 
     tax 
     lda.l .enter_door_pipe_on_yoshi,x
-    ldy !player_in_yoshi
-    bne +
-    lda.l .enter_door_pipe_pose,x
-    cmp #$80
-    beq .ignore
-+   
     sta !player_pose_num
-.ignore
-    ply 
     plx
+.ignore
     jml player_entering_door_pose_handler_return
-
-
-.enter_door_pipe_pose
-    !i #= 0
-    while !i < !max_gfx_num
-        %internal_number_to_string(!i)
-        if stringsequal("!{gfx_!{_num}_path}", "0")
-            db $00
-        else 
-            if defined("gfx_!{_num}_enter_door_pipe_pose")
-                db !{gfx_!{_num}_enter_door_pipe_pose}
-            else
-                db $00
-            endif
-        endif
-        !i #= !i+1
-    endif
 
 .enter_door_pipe_on_yoshi
     !i #= 0
@@ -799,7 +804,7 @@ player_entering_door_pose_handler:
 ;################################################
 ;# Entering a vertical pipe pose
 
-player_entering_vertical_pipe_pose_handler:
+player_vertical_pipe_pose_handler:
     lda !player_graphics_index 
     tax
     lda $89
@@ -813,11 +818,15 @@ player_entering_vertical_pipe_pose_handler:
 ..exiting
     lda.l .exit_vertical_pipe_down_on_yoshi_pose,x
     sta $00
+    lda.l .exit_vertical_pipe_down_carry_pose,x
+    sta $01
     lda.l .exit_vertical_pipe_down_pose,x
     bra .end
 ..entering
     lda.l .enter_vertical_pipe_down_on_yoshi_pose,x
     sta $00
+    lda.l .enter_vertical_pipe_down_carry_pose,x
+    sta $01
     lda.l .enter_vertical_pipe_down_pose,x
     bra .end
 .go_up
@@ -827,15 +836,24 @@ player_entering_vertical_pipe_pose_handler:
 ..exiting
     lda.l .exit_vertical_pipe_up_on_yoshi_pose,x
     sta $00
+    lda.l .exit_vertical_pipe_up_carry_pose,x
+    sta $01
     lda.l .exit_vertical_pipe_up_pose,x
     bra .end
 ..entering
     lda.l .enter_vertical_pipe_up_on_yoshi_pose,x
     sta $00
+    lda.l .enter_vertical_pipe_up_carry_pose,x
+    sta $01
     lda.l .enter_vertical_pipe_up_pose,x
 .end
+    ldy !player_holding
+    bne +
     ldy !player_in_yoshi
-    jml player_entering_vertical_pipe_pose_handler_return
+    jml player_vertical_pipe_pose_handler_return
++   
+    lda $01
+    jml player_vertical_pipe_pose_handler_carry_return
 
 .enter_vertical_pipe_up_pose
     !i #= 0
@@ -852,23 +870,6 @@ player_entering_vertical_pipe_pose_handler:
         endif
         !i #= !i+1
     endif
-
-.enter_vertical_pipe_up_on_yoshi_pose
-    !i #= 0
-    while !i < !max_gfx_num
-        %internal_number_to_string(!i)
-        if stringsequal("!{gfx_!{_num}_path}", "0")
-            db $28
-        else 
-            if defined("gfx_!{_num}_enter_vertical_pipe_up_on_yoshi_pose")
-                db !{gfx_!{_num}_enter_vertical_pipe_up_on_yoshi_pose}
-            else
-                db $2B
-            endif
-        endif
-        !i #= !i+1
-    endif
-    
 .enter_vertical_pipe_down_pose
     !i #= 0
     while !i < !max_gfx_num
@@ -884,24 +885,6 @@ player_entering_vertical_pipe_pose_handler:
         endif
         !i #= !i+1
     endif
-
-.enter_vertical_pipe_down_on_yoshi_pose
-    !i #= 0
-    while !i < !max_gfx_num
-        %internal_number_to_string(!i)
-        if stringsequal("!{gfx_!{_num}_path}", "0")
-            db $28
-        else 
-            if defined("gfx_!{_num}_enter_vertical_pipe_down_on_yoshi_pose")
-                db !{gfx_!{_num}_enter_vertical_pipe_down_on_yoshi_pose}
-            else
-                db $2B
-            endif
-        endif
-        !i #= !i+1
-    endif
-    
-    
 .exit_vertical_pipe_up_pose
     !i #= 0
     while !i < !max_gfx_num
@@ -917,24 +900,6 @@ player_entering_vertical_pipe_pose_handler:
         endif
         !i #= !i+1
     endif
-
-.exit_vertical_pipe_up_on_yoshi_pose
-    !i #= 0
-    while !i < !max_gfx_num
-        %internal_number_to_string(!i)
-        if stringsequal("!{gfx_!{_num}_path}", "0")
-            db $28
-        else 
-            if defined("gfx_!{_num}_exit_vertical_pipe_up_on_yoshi_pose")
-                db !{gfx_!{_num}_exit_vertical_pipe_up_on_yoshi_pose}
-            else
-                db $2B
-            endif
-        endif
-        !i #= !i+1
-    endif
-
-    
 .exit_vertical_pipe_down_pose
     !i #= 0
     while !i < !max_gfx_num
@@ -951,6 +916,53 @@ player_entering_vertical_pipe_pose_handler:
         !i #= !i+1
     endif
 
+
+    
+.enter_vertical_pipe_up_on_yoshi_pose
+    !i #= 0
+    while !i < !max_gfx_num
+        %internal_number_to_string(!i)
+        if stringsequal("!{gfx_!{_num}_path}", "0")
+            db $28
+        else 
+            if defined("gfx_!{_num}_enter_vertical_pipe_up_on_yoshi_pose")
+                db !{gfx_!{_num}_enter_vertical_pipe_up_on_yoshi_pose}
+            else
+                db $2B
+            endif
+        endif
+        !i #= !i+1
+    endif
+.enter_vertical_pipe_down_on_yoshi_pose
+    !i #= 0
+    while !i < !max_gfx_num
+        %internal_number_to_string(!i)
+        if stringsequal("!{gfx_!{_num}_path}", "0")
+            db $28
+        else 
+            if defined("gfx_!{_num}_enter_vertical_pipe_down_on_yoshi_pose")
+                db !{gfx_!{_num}_enter_vertical_pipe_down_on_yoshi_pose}
+            else
+                db $2B
+            endif
+        endif
+        !i #= !i+1
+    endif
+.exit_vertical_pipe_up_on_yoshi_pose
+    !i #= 0
+    while !i < !max_gfx_num
+        %internal_number_to_string(!i)
+        if stringsequal("!{gfx_!{_num}_path}", "0")
+            db $28
+        else 
+            if defined("gfx_!{_num}_exit_vertical_pipe_up_on_yoshi_pose")
+                db !{gfx_!{_num}_exit_vertical_pipe_up_on_yoshi_pose}
+            else
+                db $2B
+            endif
+        endif
+        !i #= !i+1
+    endif
 .exit_vertical_pipe_down_on_yoshi_pose
     !i #= 0
     while !i < !max_gfx_num
@@ -966,7 +978,69 @@ player_entering_vertical_pipe_pose_handler:
         endif
         !i #= !i+1
     endif
+    
 
+
+.enter_vertical_pipe_up_carry_pose
+    !i #= 0
+    while !i < !max_gfx_num
+        %internal_number_to_string(!i)
+        if stringsequal("!{gfx_!{_num}_path}", "0")
+            db $0F
+        else 
+            if defined("gfx_!{_num}_enter_vertical_pipe_up_carry_pose")
+                db !{gfx_!{_num}_enter_vertical_pipe_up_carry_pose}
+            else
+                db $0F
+            endif
+        endif
+        !i #= !i+1
+    endif
+.enter_vertical_pipe_down_carry_pose
+    !i #= 0
+    while !i < !max_gfx_num
+        %internal_number_to_string(!i)
+        if stringsequal("!{gfx_!{_num}_path}", "0")
+            db $0F
+        else 
+            if defined("gfx_!{_num}_enter_vertical_pipe_down_carry_pose")
+                db !{gfx_!{_num}_enter_vertical_pipe_down_carry_pose}
+            else
+                db $0F
+            endif
+        endif
+        !i #= !i+1
+    endif
+.exit_vertical_pipe_up_carry_pose
+    !i #= 0
+    while !i < !max_gfx_num
+        %internal_number_to_string(!i)
+        if stringsequal("!{gfx_!{_num}_path}", "0")
+            db $0F
+        else 
+            if defined("gfx_!{_num}_exit_vertical_pipe_up_carry_pose")
+                db !{gfx_!{_num}_exit_vertical_pipe_up_carry_pose}
+            else
+                db $0F
+            endif
+        endif
+        !i #= !i+1
+    endif
+.exit_vertical_pipe_down_carry_pose
+    !i #= 0
+    while !i < !max_gfx_num
+        %internal_number_to_string(!i)
+        if stringsequal("!{gfx_!{_num}_path}", "0")
+            db $0F
+        else 
+            if defined("gfx_!{_num}_exit_vertical_pipe_down_carry_pose")
+                db !{gfx_!{_num}_exit_vertical_pipe_down_carry_pose}
+            else
+                db $0F
+            endif
+        endif
+        !i #= !i+1
+    endif
 
 ;################################################
 ;# Swimming poses

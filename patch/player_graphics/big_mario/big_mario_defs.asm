@@ -45,6 +45,9 @@
 !big_mario_crouching_pose = $3C
 !big_mario_crouching_with_item_pose = $1D
 
+;# Sliding pose number
+!big_mario_sliding_pose = $1C
+
 ;# Kicking something pose number
 !big_mario_kicking_pose = $0E
 
@@ -72,8 +75,18 @@
 !big_mario_enter_door_pipe_on_yoshi_pose = $00
 
 ;# Entering a vertical pipe pose numbers
-!big_mario_enter_vertical_pipe_pose = $0F
-!big_mario_enter_vertical_pipe_on_yoshi_pose = $2B
+!big_mario_enter_vertical_pipe_up_pose = $0F
+!big_mario_enter_vertical_pipe_down_pose = $0F
+!big_mario_exit_vertical_pipe_up_pose = $0F
+!big_mario_exit_vertical_pipe_down_pose = $0F
+!big_mario_enter_vertical_pipe_up_carry_pose = $0F
+!big_mario_enter_vertical_pipe_down_carry_pose = $0F
+!big_mario_exit_vertical_pipe_up_carry_pose = $0F
+!big_mario_exit_vertical_pipe_down_carry_pose = $0F
+!big_mario_enter_vertical_pipe_up_on_yoshi_pose = $21
+!big_mario_enter_vertical_pipe_down_on_yoshi_pose = $21
+!big_mario_exit_vertical_pipe_up_on_yoshi_pose = $21
+!big_mario_exit_vertical_pipe_down_on_yoshi_pose = $21
 
 ;# Yoshi related poses
 !big_mario_on_yoshi_idle_pose = $20
