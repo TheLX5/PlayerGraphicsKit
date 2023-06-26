@@ -8,5 +8,3 @@
 
 global_animations:
     rts 
-
-

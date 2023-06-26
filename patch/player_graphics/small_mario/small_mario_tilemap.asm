@@ -407,3 +407,59 @@
     dw $0010,$0018,$0000,$0010
     dw $0018,$0000,$0010,$0000
     dw $0010,$FFF8
+    
+;################################################
+;# Cape indices
+;# Indexed by the current player pose number ($13E0)
+;# These values contain the data for the cape animation if you were to use the original cape
+;# You may leave this one empty if needed.
+
+.cape_indices
+    db $00                  ; [00]      Idle
+    db $00,$00              ; [01-02]   Walking
+    db $00                  ; [03]      Looking up
+    db $00,$00,$00          ; [04-06]   Running
+    db $00                  ; [07]      Idle, holding an item
+    db $00,$00              ; [08-09]   Walking, holding an item; second byte is also used for Jumping/Falling
+    db $00                  ; [0A]      Looking up, holding an item
+    db $00                  ; [0B]      Jumping
+    db $00                  ; [0C]      Jumping, max speed
+    db $0D                  ; [0D]      Braking
+    db $00                  ; [0E]      Kicking item
+    db $10                  ; [0F]      Looking to camera; spinjump pose, going into a pipe pose
+    db $13                  ; [10]      Diagonal
+    db $22,$25,$28          ; [11-13]   Running in wall
+    db $00                  ; [14]      Victory pose, on Yoshi
+    db $16                  ; [15]      Climbing
+    db $00,$00              ; [16-17]   Swimming Idle; second byte is used for holding an item
+    db $00,$00              ; [18-19]   Swimming #1; second byte is used for holding an item
+    db $00,$00              ; [1A-1B]   Swimming #2; second byte is used for holding an item
+    db $00                  ; [1C]      Sliding
+    db $08                  ; [1D]      Crouching, holding an item
+    db $19                  ; [1E]      Punching a net
+    db $1C                  ; [1F]      Turning around on Yoshi, showing back
+    db $04                  ; [20]      Mounted on Yoshi
+    db $1F                  ; [21]      Turning around on Yoshi, facing camera; going into a pipe
+    db $10                  ; [22]      Climbing, facing camera
+    db $10                  ; [23]      Punching a net, facing camera
+    db $00                  ; [24]      Falling
+    db $16                  ; [25]      Showing back; spinjump pose
+    db $10                  ; [26]      Victory pose
+    db $06,$04              ; [27-28]   Commanding Yoshi
+    db $08                  ; [29]      Crouching on Yoshi; also used for going into a pipe
+    db $2B,$30              ; [2A-2B]   Flying with cape
+    db $35                  ; [2C]      Slide with cape while flying
+    db $3A,$3F,$43          ; [2D-2F]   Dive with cape
+    db $00,$00              ; [30-31]   Burned, cutscene poses
+    db $00                  ; [32]      Looking in front, cutscene pose
+    db $00,$00              ; [33-34]   Looking at the distance, cutscene pose
+    db $00,$00,$00          ; [35-37]   Using a hammer, cutscene pose
+    db $16,$16              ; [38-39]   Using a mop, cutscene pose
+    db $00,$00              ; [3A-3B]   Using a hammer, cutscene pose, most likely unused
+    db $08			        ; [3C]      Crouching
+    db $00                  ; [3D]      Shrinking/Growing
+    db $00                  ; [3E]      Dead
+    db $00                  ; [3F]      Shooting fireball
+    db $00,$00              ; [40-41]   Unused
+    db $00,$10              ; [42-43]   Using P-Balloon 
+    db $04,$00,$06          ; [44-46]   Copy of the spinjump poses
