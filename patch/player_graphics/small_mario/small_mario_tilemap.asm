@@ -30,7 +30,10 @@
 ;# If you desire to program one by yourself, check out internal_files/vanilla_primary_animation_logic.asm
 
 .animation_logic
-    jmp vanilla_primary_animation_logic
+    jmp vanilla_primary_animation_logic_main                      ; Main routine, called by everything.
+    jmp vanilla_primary_animation_logic_coming_from_horz_pipe     ; Walking animation, called by the horizontal pipe.
+    jmp vanilla_primary_animation_logic_main                      ; Reserved for future use
+    jmp vanilla_primary_animation_logic_main                      ; Reserved for future use
 
 
 ;################################################

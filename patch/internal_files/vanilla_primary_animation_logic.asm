@@ -1,4 +1,5 @@
 vanilla_primary_animation_logic:
+.main
     phb 
     lda #$00
     pha 
@@ -310,3 +311,9 @@ vanilla_primary_animation_logic:
     plb 
     rts 
 
+.coming_from_horz_pipe
+    phb 
+    lda #$00
+    pha 
+    plb 
+    jmp .player_just_jumped
