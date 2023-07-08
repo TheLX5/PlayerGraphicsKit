@@ -1,7 +1,7 @@
 ;##################################################################################################
-;# GFX set: Big Mario
-;# Author: Nintendo
-;# Description: Default set for Big Mario
+;# GFX set: Template
+;# Author: lx5
+;# Description: Template file
 
 ;################################################
 ;# Smooth animation index
